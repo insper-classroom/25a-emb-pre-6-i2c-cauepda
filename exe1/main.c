@@ -10,6 +10,7 @@
 #include "hardware/i2c.h"
 #include "mpu6050.h"
 
+const int ACCEL_CONFIG = 0x1C;
 const int I2C_CHIP_ADDRESS = 0x68;
 const int I2C_SDA_GPIO = 20;
 const int I2C_SCL_GPIO = 21;
@@ -30,6 +31,11 @@ void i2c_task(void *p) {
 
     // TODO
     // Configure o acc para operar em 4G
+    uint8_t buf_config[2];
+    buf_config[0] = ACCEL_CONFIG;
+    buf_config[1] = 1 << 3;
+    i2c_write_blocking(i2c_default, I2C_CHIP_ADDRESS, buf_config, 2, false);
+
 
     while (1) {
         vTaskDelay(pdMS_TO_TICKS(200));
